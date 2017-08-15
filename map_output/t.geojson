@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "field_1": 44, "Building": "CH", "Class": "JPN 101", "Actual_Enrl": 24, "Day_T": "2016-09-27 10:00:00", "Latitude": 680507.418369, "Longitude": 7642314.424760 }, "geometry": { "type": "Point", "coordinates": [ 7642314.4247599998489, 680507.41836899996269 ] } },
+{ "type": "Feature", "properties": { "field_1": 772, "Building": "CH", "Class": "AD HOC", "Actual_Enrl": 0, "Day_T": "2016-09-27 16:00:00", "Latitude": 680507.418369, "Longitude": 7642314.424760 }, "geometry": { "type": "Point", "coordinates": [ 7642314.4247599998489, 680507.41836899996269 ] } },
+{ "type": "Feature", "properties": { "field_1": 1490, "Building": "NH", "Class": "JPN 101", "Actual_Enrl": 25, "Day_T": "2016-09-27 08:00:00", "Latitude": 680027.841616, "Longitude": 7642114.586200 }, "geometry": { "type": "Point", "coordinates": [ 7642114.586199999787, 680027.841616 ] } },
+{ "type": "Feature", "properties": { "field_1": 1494, "Building": "NH", "Class": "JPN 101", "Actual_Enrl": 25, "Day_T": "2016-09-27 12:00:00", "Latitude": 680027.841616, "Longitude": 7642114.586200 }, "geometry": { "type": "Point", "coordinates": [ 7642114.586199999787, 680027.841616 ] } },
+{ "type": "Feature", "properties": { "field_1": 1495, "Building": "NH", "Class": "JPN 201", "Actual_Enrl": 28, "Day_T": "2016-09-27 13:00:00", "Latitude": 680027.841616, "Longitude": 7642114.586200 }, "geometry": { "type": "Point", "coordinates": [ 7642114.586199999787, 680027.841616 ] } },
+{ "type": "Feature", "properties": { "field_1": 2555, "Building": "LH", "Class": "JPN 201", "Actual_Enrl": 10, "Day_T": "2016-09-27 09:00:00", "Latitude": 680747.560767, "Longitude": 7642413.458730 }, "geometry": { "type": "Point", "coordinates": [ 7642413.45873, 680747.56076699995901 ] } },
+{ "type": "Feature", "properties": { "field_1": 2637, "Building": "LH", "Class": "TA 347", "Actual_Enrl": 5, "Day_T": "2016-09-27 19:00:00", "Latitude": 680747.560767, "Longitude": 7642413.458730 }, "geometry": { "type": "Point", "coordinates": [ 7642413.45873, 680747.56076699995901 ] } },
+{ "type": "Feature", "properties": { "field_1": 2828, "Building": "OND", "Class": "AD HOC", "Actual_Enrl": 0, "Day_T": "2016-09-27 18:00:00", "Latitude": 679594.316593, "Longitude": 7642530.219240 }, "geometry": { "type": "Point", "coordinates": [ 7642530.219239998608828, 679594.31659299996682 ] } }
+]
+}
