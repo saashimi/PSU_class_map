@@ -77,7 +77,7 @@ function build_heatMap(clickLayer) {
 
   collayer.forEach(function (layer, i) {
       map.addLayer({
-          "id": "cluster-" + i,
+          "id": clickLayer + i,
           "type": "circle",
           "source": "sched_points",
           "paint": {
@@ -86,7 +86,7 @@ function build_heatMap(clickLayer) {
               "circle-blur": 1 // blur the circles to get a heatmap look
           },
           "filter": i === collayer.length - 1 ?
-              [">=", "point_count", layer[0]] :
+              [">=", "point_count", layer[0]]:
               ["all",
                   [">=", "point_count", layer[0]],
                   ["<", "point_count", collayer[i + 1][0]]]
@@ -105,5 +105,4 @@ function build_heatMap(clickLayer) {
       "filter": ["!=", "cluster", true]
   }, 'waterway-label');
 
-  map.setFilter("cluster-"+[i], ["!=", "Day_start_"+clickLayer[0], "na"])
 }
