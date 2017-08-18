@@ -114,3 +114,7 @@ function toggleLayer(ids, name) {
       var layers = document.getElementById('menu');
       layers.appendChild(link);
 }
+
+function filterBy(time) {
+  var filters = ['==', '']
+}
