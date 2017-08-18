@@ -20,15 +20,31 @@ var days = {"Mon": 'mon',
             "Sat": 'sat'}
 
 map.on('load', function() {
+  
+  map.addSource("PSU_buildings", {
+    "type": "geojson",
+    "data": "data/PSU_buildings.geojson",
+  });
+
   for (var i=0; i<toggleableLayerIds.length; i++) {
     map.addSource(days[toggleableLayerIds[i]], {
       "type": "geojson",
       "data": "data/" + days[toggleableLayerIds[i]]  + ".geojson",
       "cluster": true
     });
+    map.addLayer({
+      "id": "buildings",
+      "source": "PSU_buildings",
+      "type": "fill",
+      "paint": {
+        "fill-color": "gray",
+        "fill-opacity": .1
+      }
+    })
+
     var collayer = [
           [5, 'green'],
-          [20, 'orange'],
+          [25, 'orange'],
           [200, 'red']
       ];
 
@@ -50,7 +66,6 @@ map.on('load', function() {
                     [">=", "point_count", layer[0]],
                     ["<", "point_count", collayer[j + 1][0]]]
         }, 'waterway-label' );
-        ///todo: group layers
         groupLayer.push(toggleableLayerIds[i] + j)
 
     });
@@ -70,7 +85,7 @@ map.on('load', function() {
   toggleLayer(groupLayer, toggleableLayerIds[i])
 
   }
-  
+  console.log(map.getStyle().layers)
 })
 
 function toggleLayer(ids, name) {
@@ -98,6 +113,4 @@ function toggleLayer(ids, name) {
     
       var layers = document.getElementById('menu');
       layers.appendChild(link);
-//  }
-
 }
