@@ -33,6 +33,8 @@ map.on('load', function() {
           [200, 'red']
       ];
 
+    var groupLayer = [];
+
     collayer.forEach(function (layer, j) {
         map.addLayer({
             "id": toggleableLayerIds[i] + j,
@@ -50,11 +52,12 @@ map.on('load', function() {
                     ["<", "point_count", collayer[j + 1][0]]]
         }, 'waterway-label' );
         ///todo: group layers
+        groupLayer.push(toggleableLayerIds[i] + j)
 
     });
 
-    /*map.addLayer({
-        "id": toggleableLayerIds[i],
+    map.addLayer({
+        "id": toggleableLayerIds[i] + "-pt",
         "type": "circle",
         "source": days[toggleableLayerIds[i]],
         "paint": {
@@ -63,7 +66,9 @@ map.on('load', function() {
             "circle-blur": 1
         },
         "filter": ["!=", "cluster", true]
-    }, 'waterway-label');*/
+    }, 'waterway-label');
+  groupLayer.push(toggleableLayerIds[i] + "-pt")
+  toggleLayer(groupLayer, toggleableLayerIds[i])
 
   }
   
@@ -79,18 +84,19 @@ function toggleLayer(ids, name) {
       link.textContent = name; //changed from id
 
       link.onclick = function (e) {
-          var clickedLayer = this.textContent;
+          //var clickedLayer = this.textContent;
           e.preventDefault();
           e.stopPropagation();
+          for (layers in ids) {
+            var visibility = map.getLayoutProperty(ids[layers], 'visibility');
 
-          var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-          if (visibility === 'visible') {
-              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-              this.className = '';
-          } else {
-              this.className = 'active';
-              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+            if (visibility === 'visible') {
+                map.setLayoutProperty(ids[layers], 'visibility', 'none');
+                this.className = '';
+            } else {
+                this.className = 'active';
+                map.setLayoutProperty(ids[layers], 'visibility', 'visible');
+            }
           }
       };
     
