@@ -21,7 +21,6 @@ var days = {"Mon": 'mon',
 
 map.on('load', function() {
   for (var i=0; i<toggleableLayerIds.length; i++) {
-    console.log("data/" + days[toggleableLayerIds[i]]  + ".geojson");
     map.addSource(days[toggleableLayerIds[i]], {
       "type": "geojson",
       "data": "data/" + days[toggleableLayerIds[i]]  + ".geojson",
@@ -75,9 +74,6 @@ map.on('load', function() {
 })
 
 function toggleLayer(ids, name) {
-//  for (var i = 0; i < toggleableLayerIds.length; i++) {
-//      var id = toggleableLayerIds[i];
-
       var link = document.createElement('a');
       link.href = '#';
       link.className = 'active';
