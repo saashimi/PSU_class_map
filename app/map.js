@@ -33,71 +33,69 @@ map.on('load', function() {
           [200, 'red']
       ];
 
-  collayer.forEach(function (layer, j) {
-      map.addLayer({
-          "id": toggleableLayerIds[i] + j,
-          "type": "circle",
-          "source": days[toggleableLayerIds[i]],
-          "paint": {
-              "circle-color": layer[1],
-              "circle-radius": 70,
-              "circle-blur": 1 // blur the circles to get a heatmap look
-          },
-          "filter": j === collayer.length - 1 ?
-              [">=", "point_count", layer[0]]:
-              ["all",
-                  [">=", "point_count", layer[0]],
-                  ["<", "point_count", collayer[j + 1][0]]]
-      }, 'waterway-label' );
+    collayer.forEach(function (layer, j) {
+        map.addLayer({
+            "id": toggleableLayerIds[i] + j,
+            "type": "circle",
+            "source": days[toggleableLayerIds[i]],
+            "paint": {
+                "circle-color": layer[1],
+                "circle-radius": 70,
+                "circle-blur": 1 // blur the circles to get a heatmap look
+            },
+            "filter": j === collayer.length - 1 ?
+                [">=", "point_count", layer[0]]:
+                ["all",
+                    [">=", "point_count", layer[0]],
+                    ["<", "point_count", collayer[j + 1][0]]]
+        }, 'waterway-label' );
+        ///todo: group layers
 
-  });
+    });
 
-  map.addLayer({
-      "id": toggleableLayerIds[i],
-      "type": "circle",
-      "source": days[toggleableLayerIds[i]],
-      "paint": {
-          "circle-color": 'rgba(0,255,0,0.5)',
-          "circle-radius": 20,
-          "circle-blur": 1
-      },
-      "filter": ["!=", "cluster", true]
-  }, 'waterway-label');
+    /*map.addLayer({
+        "id": toggleableLayerIds[i],
+        "type": "circle",
+        "source": days[toggleableLayerIds[i]],
+        "paint": {
+            "circle-color": 'rgba(0,255,0,0.5)',
+            "circle-radius": 20,
+            "circle-blur": 1
+        },
+        "filter": ["!=", "cluster", true]
+    }, 'waterway-label');*/
 
   }
   
 })
 
-for (var i = 0; i < toggleableLayerIds.length; i++) {
-    var id = toggleableLayerIds[i];
+function toggleLayer(ids, name) {
+//  for (var i = 0; i < toggleableLayerIds.length; i++) {
+//      var id = toggleableLayerIds[i];
 
-    var link = document.createElement('a');
-    link.href = '#';
-    link.className = 'active';
-    link.textContent = id;
+      var link = document.createElement('a');
+      link.href = '#';
+      link.className = 'active';
+      link.textContent = name; //changed from id
 
-    link.onclick = function (e) {
-        var clickedLayer = this.textContent;
-        e.preventDefault();
-        e.stopPropagation();
+      link.onclick = function (e) {
+          var clickedLayer = this.textContent;
+          e.preventDefault();
+          e.stopPropagation();
 
-        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+          var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
 
-        if (visibility === 'visible') {
-            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-            this.className = '';
-        } else {
-            this.className = 'active';
-            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-        }
-    };
-  
-    var layers = document.getElementById('menu');
-    layers.appendChild(link);
+          if (visibility === 'visible') {
+              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+              this.className = '';
+          } else {
+              this.className = 'active';
+              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+          }
+      };
+    
+      var layers = document.getElementById('menu');
+      layers.appendChild(link);
+//  }
+
 }
-
-
-function build_heatMap(clickLayer) {
-  
-
-} 
