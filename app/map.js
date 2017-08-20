@@ -86,6 +86,7 @@ map.on('load', function() {
   toggleLayer(groupLayer, toggleableLayerIds[i])
 
   }
+console.log(map.getStyle().layers)
 
 })
 
@@ -131,17 +132,21 @@ function filterBy(layer, timeIndex) {
   ["2016-09-26 12:00:00Z", "2016-09-26 14:00:00Z"]
   ["2016-09-26 14:00:00Z", "2016-09-26 16:00:00Z"],
   ["2016-09-26 16:00:00Z", "2016-09-26 18:00:00Z"],
-  ["2016-09-26 18:00:00Z", "2016-09-26 20:00:00Z"],
-]
+  ["2016-09-26 18:00:00Z", "2016-09-26 20:00:00Z"]
+  ]
   
   var startHour = new Date(timeRanges[timeIndex][0]).getUTCHours();
   var endHour = new Date(timeRanges[timeIndex][1]).getUTCHours();
-  console.log(startHour, endHour); //this works
+  console.log(layer, startHour, endHour); //this works
+  console.log(map.getLayo('Mon'))
+
 
   var filters = ["all",
     ["<=", "Day_start_"+layer[0], startHour],
-    [">=", "Day_end_"+layer[0], endHour]]
-  map.setFilter(filters);
+    [">=", "Day_end_"+layer[0], endHour]
+    ]
+  
+  map.setFilter(layer="Mon-pt", filters);
 
 }
 
