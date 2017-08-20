@@ -81,11 +81,12 @@ map.on('load', function() {
         },
         "filter": ["!=", "cluster", true]
     }, 'waterway-label');
+  
   groupLayer.push(toggleableLayerIds[i] + "-pt")
   toggleLayer(groupLayer, toggleableLayerIds[i])
 
   }
-  console.log(map.getStyle().layers)
+
 })
 
 function toggleLayer(ids, name) {
@@ -95,7 +96,6 @@ function toggleLayer(ids, name) {
       link.textContent = name; //changed from id
 
       link.onclick = function (e) {
-          //var clickedLayer = this.textContent;
           e.preventDefault();
           e.stopPropagation();
           for (layers in ids) {
@@ -103,18 +103,55 @@ function toggleLayer(ids, name) {
 
             if (visibility === 'visible') {
                 map.setLayoutProperty(ids[layers], 'visibility', 'none');
-                this.className = '';
+                this.className = '';  
             } else {
                 this.className = 'active';
                 map.setLayoutProperty(ids[layers], 'visibility', 'visible');
+                //Event listener
+                document.getElementById('slider').addEventListener('input', function(evt) {
+                    var timeIndex = parseInt(evt.target.value, 10);
+                    filterBy(link.textContent, timeIndex);
+                });
+
             }
           }
       };
     
       var layers = document.getElementById('menu');
       layers.appendChild(link);
+      // should call filterBy
 }
 
-function filterBy(time) {
-  var filters = ['==', '']
+function filterBy(layer, timeIndex) {
+ 
+  var timeRanges = [
+  ["2016-09-26 06:00:00Z", "2016-09-26 08:00:00Z"],
+  ["2016-09-26 08:00:00Z", "2016-09-26 10:00:00Z"],
+  ["2016-09-26 10:00:00Z", "2016-09-26 12:00:00Z"],
+  ["2016-09-26 12:00:00Z", "2016-09-26 14:00:00Z"]
+  ["2016-09-26 14:00:00Z", "2016-09-26 16:00:00Z"],
+  ["2016-09-26 16:00:00Z", "2016-09-26 18:00:00Z"],
+  ["2016-09-26 18:00:00Z", "2016-09-26 20:00:00Z"],
+]
+  
+  var startHour = new Date(timeRanges[timeIndex][0]).getUTCHours();
+  var endHour = new Date(timeRanges[timeIndex][1]).getUTCHours();
+  console.log(startHour, endHour); //this works
+
+  var filters = ["all",
+    ["<=", "Day_start_"+layer[0], startHour],
+    [">=", "Day_end_"+layer[0], endHour]]
+  map.setFilter(filters);
+
 }
+
+/*
+function checkRange(feature, range_start, range_end) {
+  if(range_start <= feature.properties.Day_start_M && feature.properties.Day_end_M >= range_end) {
+    return true
+  } else {
+    return false
+  }
+}
+*/
+
