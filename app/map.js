@@ -36,8 +36,8 @@ map.on('load', function() {
     }
   })
 
-  for (var i=0; i<1; i++) {
-  //for (var i=0; i<toggleableLayerIds.length; i++) {
+  //for (var i=0; i<1; i++) {
+  for (var i=0; i<toggleableLayerIds.length; i++) {
 
     map.addSource(days[toggleableLayerIds[i]], {
       "type": "geojson",
@@ -53,25 +53,27 @@ map.on('load', function() {
         'circle-radius': {
           property: 'Actual_Enrl',
           stops: [
-            [5, 1],
-            [25, 3],
-            [50, 8],
-            [100, 15]
+            [2,    3],
+            [170,  8],
+            [360,  15],
+            [710,  20],
+            [1100, 30]
           ]
       },
       'circle-color': {
         property: 'Actual_Enrl',
         stops: [
-          [5, '#2DC4B2'],
-          [10, '#3BB3C3'],
-          [25, '#669EC4'],
-          [50, '#8B88B6'],
-          [75, '#A2719B'],
-          [150, '#AA5E79']
+          [2, '#2DC4B2'],
+          [60, '#3BB3C3'],
+          [170, '#669EC4'],
+          [360, '#8B88B6'],
+          [710, '#A2719B'],
+          [1100, '#AA5E79']
         ]
       },
       'circle-opacity': 0.8     
       },
+      filter: ['==', 'Hour', 6]
     });
 
     //end temp viz layer
@@ -79,8 +81,8 @@ map.on('load', function() {
     // get the current hour as an integer
     var hour = parseInt(e.target.value);
     // map.setFilter(layer-name, filter)
-
-    map.setFilter('Mon', ['==', 'Day_start', hour]);
+    console.log(hour)
+    map.setFilter('Mon', ['==', 'Start_H', hour]);
 
     // converting 0-23 hour to AMPM format
     var ampm = hour >= 12 ? 'PM' : 'AM';
@@ -91,9 +93,6 @@ map.on('load', function() {
   
   }
 
-
-
-    console.log(map.getStyle().layers)
 
 });
 
