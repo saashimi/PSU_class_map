@@ -13,63 +13,35 @@ def format_date(df_date):
     df_date['Days'] = df_date['Meeting_Times'].str.extract('([^\s]+)', expand=True).astype(str)
     df_date['Start_Date'] = df_date['Meeting_Dates'].str.extract('([^\s]+)', expand=True)
     df_date['End_Date'] = df_date['Meeting_Dates'].str.extract('(?<=-)(.*)(?= )', expand=True)
-    df_date['Start_Time'] = df_date['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True)
-    df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True)
-
+    df_date['Start_Time'] = df_date['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True).astype(str)
+    df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
     df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
-    
-    date_dict = {'M' : '2016/09/26', 'T': '2016/09/27', 'W': '2016/09/28', 'R': '2016/09/29', 'F': '2016/09/30', 'S': '2016/10/01', 'U':'2016/10/02'}
-    days = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
-    for day in days:
-        df_date['Day_start_{0}'.format(day)] = 'na'
-        df_date['Day_end_{0}'.format(day)] = 'na'
 
     for index, row in df_date.iterrows():
-        for day in row['Days']:
-            for match_day in days: # e.g. MWF in the string
-                try:
-                    if day == match_day:
-                        start_time = pd.to_datetime(date_dict[day] + row['Start_Time'], format='%Y/%m/%d%H%M').hour
-                        end_time = pd.to_datetime(date_dict[day] + row['End_Time'], format='%Y/%m/%d%H%M').hour
-                        df_date.loc[index, 'Day_start_{0}'.format(day)] = start_time
-                        df_date.loc[index, 'Day_end_{0}'.format(day)] = end_time
-                    else:
-                        continue
-                except:
-                    continue
+        try:
+            df_date.loc[index, 'Start_Time'] = int(row['Start_Time'][0:2])
+            df_date.loc[index, 'End_Time'] = int(row['End_Time'][0:2])
+        except:
+            continue
+   
     return df_date
 
 
 def save_to_csv(df_final):
     """
-    Save to separate csv files per weekday
+    Simplifies data file by saving only pertinent data
     """
     df_final = df_final.loc[
         (df_final['Latitude'] != None) &
-        (df_final['Longitude'] != None)]
-    columns = ['Building', 'Class', 'Actual_Enrl', 'Latitude', 'Longitude']
-    day_cols = [col for col in df_final.columns if 'Day' in col]
-    for col in day_cols:
-        columns.append(col)   
-    df_final.to_csv('full_sched.csv', columns=columns)
-    days = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
-    for day in days:
-        df_temp = df_final.loc[
-            (df_final['Day_start_{0}'.format(day)] != 'na') &
-            (df_final['Day_end_{0}'.format(day)] != 'na') &
-            (df_final['Actual_Enrl'] > 0) ]
-        
-        df_temp = df_temp.rename(columns={'Day_start_{0}'.format(day):'Start_H',
-                                'Day_end_{0}'.format(day): 'End_H'})
-
-        agg_operations = ({'Actual_Enrl' : 'sum',
+        (df_final['Longitude'] != None) &
+        (df_final['Actual_Enrl'] > 0)]
+    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Days', 'Start_Time', 'End_Time']
+    agg_operations = ({'Actual_Enrl' : 'sum',
                           'Latitude' : 'max',
                           'Longitude' : 'max'})
-        df_temp = df_temp.groupby(['Building', 'Start_H', 'End_H'], as_index=False).agg(agg_operations)
+    df_final = df_final.groupby(['Building', 'Start_Time', 'End_Time', 'Days'], as_index=False).agg(agg_operations)
+    df_final.to_csv('full_sched.csv', columns=columns)
 
-        columns = ['Building', 'Actual_Enrl', 'Start_H',
-         'End_H', 'Latitude', 'Longitude']
-        df_temp.to_csv('classes_{0}.csv'.format(day), columns=columns)
 
 def join_coords(df_proc):
     filename = 'map_input/bldg_pt.csv'
