@@ -11,15 +11,10 @@ var map = new mapboxgl.Map({
     center: [-122.682357, 45.508532], // starting position [lng, lat]
     zoom: 14, // starting zoom
 })
-var toggleableLayerIds = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var days = {"Mon": "mon",
-            "Tue": "tue",
-            "Wed": "wed",
-            "Thu": "thu",
-            "Fri": "fri",
-            "Sat": "sat"}
-
-var filterHour = ['==', 'Start_Time', 6];
+var filterHour = ["all", 
+                  ["<=", "Start_Time", 6],
+                  [">=", "End_Time", 6]
+                 ];
 var filterDay = ['==', 'Day_M', "TRUE"];
 
 map.on("load", function() {
@@ -61,12 +56,12 @@ map.on("load", function() {
     "circle-color": {
       property: "Actual_Enrl",
       stops: [
-        [2, "#2DC4B2"],
-        [60, "#3BB3C3"],
-        [170, "#669EC4"],
-        [360, "#8B88B6"],
-        [710, "#A2719B"],
-        [1100, "#AA5E79"]
+        [2, "#ffffb2"],
+        [60, "#fed976"],
+        [170, "#feb24c"],
+        [360, "#fd8d3c"],
+        [710, "#f03b20"],
+        [1100, "#bd0026"]
       ]
     },
     "circle-opacity": 0.8     
@@ -78,7 +73,10 @@ map.on("load", function() {
   // get the current hour as an integer
   var hour = parseInt(e.target.value);
   // map.setFilter(layer-name, filter)
-  filterHour = ["==", "Start_Time", hour]
+  filterHour = ["all", 
+                ["<=", "Start_Time", hour],
+                [">=", "End_Time", hour]
+               ]
   map.setFilter("classes", ["all", filterHour, filterDay]);
 
   // converting 0-23 hour to AMPM format
@@ -90,7 +88,6 @@ map.on("load", function() {
   
   document.getElementById("filters").addEventListener("change", function(e) {
     var day = e.target.value;
-    console.log(day);
     if (day === "Mon") {
       filterDay = ["==", "Day_M", "TRUE"];
     } else if (day === "Tue") {

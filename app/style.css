@@ -29,8 +29,28 @@ a {
 
 #console {
   position: absolute;
-  width: 240px;
+  width: 260px;
   margin: 10px;
   padding: 10px 20px;
   background-color: white;
+}
+
+.session {
+  margin-bottom: 20px;
+}
+
+.row {
+  height: 12px;
+  width: 100%;
+}
+
+.colors {
+  background: linear-gradient(to right, #ffffb2, #fed976, #feb24c, #fd8d3c, #f03b20, #bd0026);
+  margin-bottom: 5px;
+}
+
+.label {
+  width: 15%;
+  display: inline-block;
+  text-align: center;
 }
