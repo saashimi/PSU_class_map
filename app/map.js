@@ -138,7 +138,7 @@ function filterBy(layer, timeIndex) {
   var startHour = new Date(timeRanges[timeIndex][0]).getUTCHours();
   var endHour = new Date(timeRanges[timeIndex][1]).getUTCHours();
   console.log(layer, startHour, endHour); //this works
-  console.log(map.getLayo('Mon'))
+  console.log(map.getLayoutProperty(layer+"-pt"))
 
 
   var filters = ["all",
