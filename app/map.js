@@ -5,6 +5,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia3NhYXZlZHJhIiwiYSI6ImNpam45bG1lbDAwZWx2YWx4a
 var filterGroup = document.getElementById('filter-group');
 var filters = document.getElementById('filters');
 var daySelect = 'Mon';
+var filterHour, filterDay;
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
@@ -74,7 +75,7 @@ map.on('load', function() {
       },
       'circle-opacity': 0.8     
       },
-      filter: ['==', 'Start_H', 6]
+      filter: ['all', filterHour, filterDay]
     });
   
   }
@@ -83,7 +84,8 @@ map.on('load', function() {
     // get the current hour as an integer
     var hour = parseInt(e.target.value);
     // map.setFilter(layer-name, filter)
-    map.setFilter(daySelect, ['==', 'Start_H', hour]);
+    filterHour = ['==', 'Start_H', hour];
+    map.setFilter(daySelect, ['all', filterHour, filterDay]);
 
     // converting 0-23 hour to AMPM format
     var ampm = hour >= 12 ? 'PM' : 'AM';
@@ -94,10 +96,10 @@ map.on('load', function() {
 
     document.getElementById('filters').addEventListener('change', function(e) {
       var day = e.target.value;
-      var filterDay;
-      map.setFilter(day, filterDay);
+      filterDay = null;
+      map.setFilter('all', filterHour, filterDay);
 
-
+    });
 
 });
 
