@@ -3,7 +3,8 @@
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3NhYXZlZHJhIiwiYSI6ImNpam45bG1lbDAwZWx2YWx4aHVjOXZwMTEifQ.Xt258Ze2kA28j8wnC8LtLg' 
 var filterGroup = document.getElementById('filter-group');
-var filters = document.getElementById('filters')
+var filters = document.getElementById('filters');
+var daySelect = 'Mon';
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
@@ -73,16 +74,16 @@ map.on('load', function() {
       },
       'circle-opacity': 0.8     
       },
-      filter: ['==', 'Hour', 6]
+      filter: ['==', 'Start_H', 6]
     });
+  
+  }
 
-    //end temp viz layer
     document.getElementById('slider').addEventListener('input', function(e) {
     // get the current hour as an integer
     var hour = parseInt(e.target.value);
     // map.setFilter(layer-name, filter)
-    console.log(hour)
-    map.setFilter('Mon', ['==', 'Start_H', hour]);
+    map.setFilter(daySelect, ['==', 'Start_H', hour]);
 
     // converting 0-23 hour to AMPM format
     var ampm = hour >= 12 ? 'PM' : 'AM';
@@ -90,8 +91,12 @@ map.on('load', function() {
     // update text in the UI
     document.getElementById('active-hour').innerText = hour12 + ampm;
     });
-  
-  }
+
+    document.getElementById('filters').addEventListener('change', function(e) {
+      var day = e.target.value;
+      var filterDay;
+      map.setFilter(day, filterDay);
+
 
 
 });
