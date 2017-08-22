@@ -29,9 +29,8 @@ def format_date(df_date):
             for match_day in days: # e.g. MWF in the string
                 try:
                     if day == match_day:
-                        start_time = pd.to_datetime(date_dict[day] + row['Start_Time'], format='%Y/%m/%d%H%M')
-                        end_time = pd.to_datetime(date_dict[day] + row['End_Time'], format='%Y/%m/%d%H%M')
-                        #df_date.loc[index, 'Day_{0}'.format(day)] = pd.date_range(start_time, end_time)
+                        start_time = pd.to_datetime(date_dict[day] + row['Start_Time'], format='%Y/%m/%d%H%M').hour
+                        end_time = pd.to_datetime(date_dict[day] + row['End_Time'], format='%Y/%m/%d%H%M').hour
                         df_date.loc[index, 'Day_start_{0}'.format(day)] = start_time
                         df_date.loc[index, 'Day_end_{0}'.format(day)] = end_time
                     else:
@@ -59,8 +58,17 @@ def save_to_csv(df_final):
             (df_final['Day_start_{0}'.format(day)] != 'na') &
             (df_final['Day_end_{0}'.format(day)] != 'na') &
             (df_final['Actual_Enrl'] > 0) ]
-        columns = ['Building', 'Class', 'Actual_Enrl', 'Day_start_{0}'.format(day),
-         'Day_end_{0}'.format(day), 'Latitude', 'Longitude']
+        
+        df_temp = df_temp.rename(columns={'Day_start_{0}'.format(day):'Start_H',
+                                'Day_end_{0}'.format(day): 'End_H'})
+
+        agg_operations = ({'Actual_Enrl' : 'sum',
+                          'Latitude' : 'max',
+                          'Longitude' : 'max'})
+        df_temp = df_temp.groupby(['Building', 'Start_H', 'End_H'], as_index=False).agg(agg_operations)
+
+        columns = ['Building', 'Actual_Enrl', 'Start_H',
+         'End_H', 'Latitude', 'Longitude']
         df_temp.to_csv('classes_{0}.csv'.format(day), columns=columns)
 
 def join_coords(df_proc):
