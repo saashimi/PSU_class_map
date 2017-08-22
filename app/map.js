@@ -50,9 +50,28 @@ map.on('load', function() {
       "type": "circle",
       "source": days[toggleableLayerIds[i]],
       "paint": {
-        "circle-color": "red",
+        'circle-radius': {
+          property: 'Actual_Enrl',
+          stops: [
+            [5, 1],
+            [25, 3],
+            [50, 8],
+            [100, 15]
+          ]
       },
-      "filter": ["has", "Day_start"]
+      'circle-color': {
+        property: 'Actual_Enrl',
+        stops: [
+          [5, '#2DC4B2'],
+          [10, '#3BB3C3'],
+          [25, '#669EC4'],
+          [50, '#8B88B6'],
+          [75, '#A2719B'],
+          [150, '#AA5E79']
+        ]
+      },
+      'circle-opacity': 0.8     
+      },
     });
 
     //end temp viz layer
