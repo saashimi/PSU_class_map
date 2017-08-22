@@ -19,6 +19,9 @@ var days = {"Mon": "mon",
             "Fri": "fri",
             "Sat": "sat"}
 
+var filterHour = ['==', 'Start_Time', 6];
+var filterDay = ['==', 'Day_M', "TRUE"];
+
 map.on("load", function() {
   
   map.addSource("PSU_buildings", {
@@ -68,14 +71,15 @@ map.on("load", function() {
     },
     "circle-opacity": 0.8     
     },
-    filter: ["==", "Start_Time", 6]
+    filter: ["all", filterHour, filterDay]
   }) ;
 
   document.getElementById("slider").addEventListener("input", function(e) {
   // get the current hour as an integer
   var hour = parseInt(e.target.value);
   // map.setFilter(layer-name, filter)
-  map.setFilter("classes", ["==", "Start_Time", hour]);
+  filterHour = ["==", "Start_Time", hour]
+  map.setFilter("classes", ["all", filterHour, filterDay]);
 
   // converting 0-23 hour to AMPM format
   var ampm = hour >= 12 ? "PM" : "AM";
@@ -83,6 +87,28 @@ map.on("load", function() {
   // update text in the UI
   document.getElementById("active-hour").innerText = hour12 + ampm;
   });
+  
+  document.getElementById("filters").addEventListener("change", function(e) {
+    var day = e.target.value;
+    console.log(day);
+    if (day === "Mon") {
+      filterDay = ["==", "Day_M", "TRUE"];
+    } else if (day === "Tue") {
+      filterDay = ["==", "Day_T", "TRUE"];
+    } else if (day === "Wed") {
+      filterDay = ["==", "Day_W", "TRUE"];
+    } else if (day === "Thu") {
+      filterDay = ["==", "Day_R", "TRUE"];
+    } else if (day === "Fri") {
+      filterDay = ["==", "Day_F", "TRUE"];
+    } else if (day === "Sat") {
+      filterDay = ["==", "Day_S", "TRUE"];      
+    } else {
+      console.log("error");
+    }
+    map.setFilter("classes", ["all", filterHour, filterDay]);
+  });
+
 
 });
 

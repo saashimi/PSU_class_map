@@ -22,8 +22,9 @@ def format_date(df_date):
             df_date.loc[index, 'Start_Time'] = int(row['Start_Time'][0:2])
             df_date.loc[index, 'End_Time'] = int(row['End_Time'][0:2])
         except:
-            continue
-   
+            df_date.drop(index, inplace=True)
+            continue   
+    
     return df_date
 
 
@@ -35,11 +36,25 @@ def save_to_csv(df_final):
         (df_final['Latitude'] != None) &
         (df_final['Longitude'] != None) &
         (df_final['Actual_Enrl'] > 0)]
-    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Days', 'Start_Time', 'End_Time']
     agg_operations = ({'Actual_Enrl' : 'sum',
-                          'Latitude' : 'max',
-                          'Longitude' : 'max'})
+                       'Latitude' : 'max',
+                       'Longitude' : 'max'})
     df_final = df_final.groupby(['Building', 'Start_Time', 'End_Time', 'Days'], as_index=False).agg(agg_operations)
+    days = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
+    for index, row in df_final.iterrows():
+        for day in row['Days']:
+            for match_day in days: # e.g. MWF in the string
+                try:
+                    if day == match_day:
+                        df_final.loc[index, 'Day_{0}'.format(day)] = False
+                    else:
+                        df_final.loc[index, 'Day_{0}'.format(day)] = True
+                except:
+                    continue
+    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Start_Time', 'End_Time']
+    day_cols = [col for col in df_final.columns if 'Day' in col]
+    for col in day_cols:
+        columns.append(col) 
     df_final.to_csv('full_sched.csv', columns=columns)
 
 
