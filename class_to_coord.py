@@ -16,15 +16,21 @@ def format_date(df_date):
     df_date['Start_Time'] = df_date['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True).astype(str)
     df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
     df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
+    df_date['Time_Range'] = None
 
     for index, row in df_date.iterrows():
         try:
-            df_date.loc[index, 'Start_Time'] = int(row['Start_Time'][0:2])
-            df_date.loc[index, 'End_Time'] = int(row['End_Time'][0:2])
+            start = int(row['Start_Time'][0:2])
+            end = int(row['End_Time'][0:2])
+            #print(list(range(int(start), int(end)+1)))
+            df_date.loc[index, 'Time_Range'] = list(range(int(start), int(end)+1))
+            print(row['Time_Range'])
+        
         except:
             df_date.drop(index, inplace=True)
-            continue   
-    
+            continue    
+        
+
     return df_date
 
 
@@ -51,7 +57,7 @@ def save_to_csv(df_final):
                         df_final.loc[index, 'Day_{0}'.format(day)] = True
                 except:
                     continue
-    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Start_Time', 'End_Time']
+    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Start_Time', 'End_Time', 'Time_Range']
     day_cols = [col for col in df_final.columns if 'Day' in col]
     for col in day_cols:
         columns.append(col) 
