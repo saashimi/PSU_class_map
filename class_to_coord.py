@@ -16,20 +16,23 @@ def format_date(df_date):
     df_date['Start_Time'] = df_date['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True).astype(str)
     df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
     df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
-    df_date['Time_Range'] = None
+
+    class_hr_range = list(range(0, 24))
+    for hr in class_hr_range:
+        df_date[hr] = None
 
     for index, row in df_date.iterrows():
+
         try:
             start = int(row['Start_Time'][0:2])
             end = int(row['End_Time'][0:2])
-            #print(list(range(int(start), int(end)+1)))
-            df_date.loc[index, 'Time_Range'] = list(range(int(start), int(end)+1))
-            print(row['Time_Range'])
-        
+            time_array = str(list(range(start, end+1)))
+            df_date.loc[index, 'Time_Range'] = time_array          
+
         except:
             df_date.drop(index, inplace=True)
-            continue    
-        
+            continue 
+    df_date.to_csv('full_sched.csv')
 
     return df_date
 
@@ -37,7 +40,21 @@ def format_date(df_date):
 def save_to_csv(df_final):
     """
     Simplifies data file by saving only pertinent data
-    """
+    """   
+    for index, row in df_final.iterrows():
+        start = int(row['Start_Time'][0:2])
+        end = int(row['End_Time'][0:2])
+        time_array = list(range(start, end+1))
+        print(time_array)
+
+        for hr in time_array:
+            headers = list(df_final)
+            if hr in headers:
+                df_final.loc[index, df_final[hr]] = False
+            else:
+                df_final.loc[index, df_final[hr]] = True
+
+
     df_final = df_final.loc[
         (df_final['Latitude'] != None) &
         (df_final['Longitude'] != None) &
@@ -45,7 +62,7 @@ def save_to_csv(df_final):
     agg_operations = ({'Actual_Enrl' : 'sum',
                        'Latitude' : 'max',
                        'Longitude' : 'max'})
-    df_final = df_final.groupby(['Building', 'Start_Time', 'End_Time', 'Days'], as_index=False).agg(agg_operations)
+    df_final = df_final.groupby(['Building', 'Start_Time', 'End_Time', 'Days', 'Time_Range'], as_index=False).agg(agg_operations)
     days = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
     for index, row in df_final.iterrows():
         for day in row['Days']:
