@@ -17,9 +17,11 @@ def format_date(df_date):
     df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
     df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
 
+    """
     class_hr_range = list(range(0, 24))
     for hr in class_hr_range:
         df_date[hr] = None
+    """
 
     for index, row in df_date.iterrows():
 
@@ -32,7 +34,7 @@ def format_date(df_date):
         except:
             df_date.drop(index, inplace=True)
             continue 
-    df_date.to_csv('full_sched.csv')
+    #df_date.to_csv('full_sched.csv')
 
     return df_date
 
@@ -41,20 +43,6 @@ def save_to_csv(df_final):
     """
     Simplifies data file by saving only pertinent data
     """   
-    for index, row in df_final.iterrows():
-        start = int(row['Start_Time'][0:2])
-        end = int(row['End_Time'][0:2])
-        time_array = list(range(start, end+1))
-        print(time_array)
-
-        for hr in time_array:
-            headers = list(df_final)
-            if hr in headers:
-                df_final.loc[index, df_final[hr]] = False
-            else:
-                df_final.loc[index, df_final[hr]] = True
-
-
     df_final = df_final.loc[
         (df_final['Latitude'] != None) &
         (df_final['Longitude'] != None) &
@@ -74,10 +62,28 @@ def save_to_csv(df_final):
                         df_final.loc[index, 'Day_{0}'.format(day)] = True
                 except:
                     continue
+
+
+    for index, row in df_final.iterrows():
+        start = int(row['Start_Time'][0:2])
+        end = int(row['End_Time'][0:2])
+        time_array = list(range(start, end+1))
+        class_hr_range = list(range(6, 24))
+
+        for class_hr in class_hr_range:
+            for sched_hr in time_array:
+                if sched_hr == class_hr:
+                    df_final.loc[index, 'Hr_{0}'.format(str(sched_hr))] = False
+                else:
+                    df_final.loc[index, 'Hr_{0}'.format(str(sched_hr))] = True
+
     columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Start_Time', 'End_Time', 'Time_Range']
     day_cols = [col for col in df_final.columns if 'Day' in col]
     for col in day_cols:
         columns.append(col) 
+    class_hr_cols = [col for col in df_final.columns if 'Hr' in col]
+    for col in class_hr_cols:
+        columns.append(col)
     df_final.to_csv('full_sched.csv', columns=columns)
 
 
