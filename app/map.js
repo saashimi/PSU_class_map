@@ -11,10 +11,7 @@ var map = new mapboxgl.Map({
     center: [-122.682357, 45.508532], // starting position [lng, lat]
     zoom: 14, // starting zoom
 })
-var filterHour = ["all", 
-                  ["<=", "Start_Time", 6],
-                  [">=", "End_Time", 6]
-                 ];
+var filterHour = ["==", "Hr_6", "TRUE"];
 var filterDay = ['==', 'Day_M', "TRUE"];
 
 map.on("load", function() {
@@ -73,10 +70,45 @@ map.on("load", function() {
   // get the current hour as an integer
   var hour = parseInt(e.target.value);
   // map.setFilter(layer-name, filter)
-  filterHour = ["all", 
-                ["<=", "Start_Time", hour],
-                [">=", "End_Time", hour]
-               ]
+  if (hour === 6) {
+    filterHour = ["==", "Hr_6", "TRUE"];
+  } else if (hour === 7) {
+    filterHour = ["==", "Hr_7", "TRUE"];
+  } else if (hour === 8) {
+    filterHour = ["==", "Hr_8", "TRUE"];     
+  } else if (hour === 9) {
+    filterHour = ["==", "Hr_9", "TRUE"];  
+  } else if (hour === 10) {
+    filterHour = ["==", "Hr_10", "TRUE"];
+  } else if (hour === 11) {
+    filterHour = ["==", "Hr_11", "TRUE"];     
+  } else if (hour === 12) {
+    filterHour = ["==", "Hr_12", "TRUE"]; 
+  } else if (hour === 13) {
+    filterHour = ["==", "Hr_13", "TRUE"];
+  } else if (hour === 14) {
+    filterHour = ["==", "Hr_14", "TRUE"];     
+  } else if (hour === 15) {
+    filterHour = ["==", "Hr_15", "TRUE"]; 
+  } else if (hour === 16) {
+    filterHour = ["==", "Hr_16", "TRUE"];
+  } else if (hour === 17) {
+    filterHour = ["==", "Hr_17", "TRUE"];     
+  } else if (hour === 18) {
+    filterHour = ["==", "Hr_18", "TRUE"]; 
+  } else if (hour === 19) {
+    filterHour = ["==", "Hr_19", "TRUE"]; 
+  } else if (hour === 20) {
+    filterHour = ["==", "Hr_20", "TRUE"]; 
+  } else if (hour === 21) {
+    filterHour = ["==", "Hr_21", "TRUE"];
+  } else if (hour === 22) {
+    filterHour = ["==", "Hr_22", "TRUE"];     
+  } else if (hour === 23) {
+    filterHour = ["==", "Hr_23", "TRUE"]; 
+  } else {
+    console.log('error');
+  }
   map.setFilter("classes", ["all", filterHour, filterDay]);
 
   // converting 0-23 hour to AMPM format
