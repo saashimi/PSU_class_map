@@ -6,9 +6,7 @@ import os
 
 def format_date(df_date):
     """
-    Splits Meeting Times and Dates into datetime objects where applicable using 
-    regex. Adds separate columns for days of the weeks to facilitate separate 
-    csv file generation. 
+    Splits Meeting Times and Dates into separate columns.
     """
     df_date['Days'] = df_date['Meeting_Times'].str.extract('([^\s]+)', expand=True).astype(str)
     df_date['Start_Date'] = df_date['Meeting_Dates'].str.extract('([^\s]+)', expand=True)
@@ -17,14 +15,8 @@ def format_date(df_date):
     df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
     df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
 
-    """
-    class_hr_range = list(range(0, 24))
-    for hr in class_hr_range:
-        df_date[hr] = None
-    """
-
     for index, row in df_date.iterrows():
-
+        
         try:
             start = int(row['Start_Time'][0:2])
             end = int(row['End_Time'][0:2])
@@ -34,10 +26,19 @@ def format_date(df_date):
         except:
             df_date.drop(index, inplace=True)
             continue 
-    #df_date.to_csv('full_sched.csv')
 
+        time_array = list(range(start, end+1))
+        class_hr_range = list(range(6, 24))
+
+        for class_hr in class_hr_range:
+            for sched_hr in time_array:
+                if sched_hr == class_hr:
+                    df_date.loc[index, 'Hr_{0}'.format(str(sched_hr))] = False
+                else:
+                    df_date.loc[index, 'Hr_{0}'.format(str(sched_hr))] = True
+
+    df_date.to_csv('test_sched.csv')
     return df_date
-
 
 def save_to_csv(df_final):
     """
@@ -62,20 +63,6 @@ def save_to_csv(df_final):
                         df_final.loc[index, 'Day_{0}'.format(day)] = True
                 except:
                     continue
-
-
-    for index, row in df_final.iterrows():
-        start = int(row['Start_Time'][0:2])
-        end = int(row['End_Time'][0:2])
-        time_array = list(range(start, end+1))
-        class_hr_range = list(range(6, 24))
-
-        for class_hr in class_hr_range:
-            for sched_hr in time_array:
-                if sched_hr == class_hr:
-                    df_final.loc[index, 'Hr_{0}'.format(str(sched_hr))] = False
-                else:
-                    df_final.loc[index, 'Hr_{0}'.format(str(sched_hr))] = True
 
     columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'Start_Time', 'End_Time', 'Time_Range']
     day_cols = [col for col in df_final.columns if 'Day' in col]
