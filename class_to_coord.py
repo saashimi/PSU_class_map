@@ -83,6 +83,7 @@ def save_to_csv(df_final):
     """
     Simplifies data file by saving only pertinent data
     """   
+    df_final = df_final.loc[df_final['Actual_Enrl'] > 0]
     columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude']
     day_cols = [col for col in df_final.columns if 'Day' in col]
     for col in day_cols:
@@ -100,8 +101,6 @@ def main():
     filename = 'map_input/PSU_master_classroom.csv'
     df = pd.read_csv(os.path.join(os.path.dirname(__file__), filename), dtype={'Schedule': object, 'Schedule Desc': object})   
     df = df.fillna('')
-    # Avoid classes that only occur on a single day
-    #df = df.loc[df['Start_Date'] != df['End_Date']]
     df = df.loc[df['Online Instruct Method'] != 'Fully Online']
     # Limit to Fall 2016
     terms = [201604]
