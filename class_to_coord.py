@@ -4,27 +4,27 @@ import numpy as np
 import datetime
 import os
 
-def format_date(df_date):
+def split_time(df_time):
     """
     Splits Meeting Times and Dates into separate columns.
     """
-    df_date['Days'] = df_date['Meeting_Times'].str.extract('([^\s]+)', expand=True).astype(str)
-    df_date['Start_Date'] = df_date['Meeting_Dates'].str.extract('([^\s]+)', expand=True)
-    df_date['End_Date'] = df_date['Meeting_Dates'].str.extract('(?<=-)(.*)(?= )', expand=True)
-    df_date['Start_Time'] = df_date['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True).astype(str)
-    df_date['End_Time'] = df_date['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
-    df_date['Building'] =  df_date['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
+    df_time['Days'] = df_time['Meeting_Times'].str.extract('([^\s]+)', expand=True).astype(str)
+    df_time['Start_Date'] = df_time['Meeting_Dates'].str.extract('([^\s]+)', expand=True)
+    df_time['End_Date'] = df_time['Meeting_Dates'].str.extract('(?<=-)(.*)(?= )', expand=True)
+    df_time['Start_Time'] = df_time['Meeting_Times'].str.extract('(?<= )(.*)(?=-)', expand=True).astype(str)
+    df_time['End_Time'] = df_time['Meeting_Times'].str.extract('((?<=-).*$)', expand=True).astype(str)
+    df_time['Building'] =  df_time['ROOM'].str.extract('([^\s]+)', expand=True).astype(str)
 
-    for index, row in df_date.iterrows():
+    for index, row in df_time.iterrows():
         
         try:
             start = int(row['Start_Time'][0:2])
             end = int(row['End_Time'][0:2])
             time_array = str(list(range(start, end+1)))
-            df_date.loc[index, 'Time_Range'] = time_array          
+            df_time.loc[index, 'Time_Range'] = time_array          
 
         except:
-            df_date.drop(index, inplace=True)
+            df_time.drop(index, inplace=True)
             continue 
 
         time_array = list(range(start, end+1))
@@ -33,12 +33,29 @@ def format_date(df_date):
         for class_hr in class_hr_range:
             for sched_hr in time_array:
                 if sched_hr == class_hr:
-                    df_date.loc[index, 'Hr_{0}'.format(str(sched_hr))] = False
+                    df_time.loc[index, 'Hr_{0}'.format(str(sched_hr))] = False
                 else:
-                    df_date.loc[index, 'Hr_{0}'.format(str(sched_hr))] = True
+                    df_time.loc[index, 'Hr_{0}'.format(str(sched_hr))] = True
 
-    df_date.to_csv('test_sched.csv')
-    return df_date
+    #df_time.to_csv('test_sched.csv')
+    return df_time
+
+def group_hour(df_all_hours):
+    """
+    Loops through every Hr column and groups by hour; output is a final combined
+    dataframe.
+    """
+    # an empty dataframe:
+    df_by_hr = pd.DataFrame()
+    group_hours = list(range(6, 24))
+    for hr in group_hours:
+        agg_hr_operations = ({'Actual_Enrl' : 'sum'})
+        df_temp = df_all_hours.groupby(['Building', 'Days', 'Hr_{0}'.format(str(hr))], as_index=False).agg(agg_hr_operations)
+        df_by_hr = df_by_hr.append(df_temp, ignore_index = True)
+    
+    df_by_hr.to_csv('test_group_hr.csv')
+    return df_by_hr
+
 
 def save_to_csv(df_final):
     """
@@ -91,15 +108,14 @@ def main():
 
     terms = [201604]
     df = df.loc[df['Term'].isin(terms)]
-
-    df = format_date(df)
-
+    df = split_time(df)
+    df = group_hour(df)
     df = join_coords(df)
 
     # Avoid classes that only occur on a single day
     df = df.loc[df['Start_Date'] != df['End_Date']]
     df = df.loc[df['Online Instruct Method'] != 'Fully Online']
-    save_to_csv(df)
+    #save_to_csv(df)
 
 if __name__ == '__main__':
     main()
