@@ -46,8 +46,9 @@ def group_hour(df_all_hours):
     df_by_hr = pd.DataFrame()
     group_hours = list(range(6, 24))
     for hr in group_hours:
-        agg_hr_operations = ({'Actual_Enrl' : 'sum'})
-        df_temp = df_all_hours.groupby(['Building', 'Days', 'Hr_{0}'.format(str(hr))], as_index=False).agg(agg_hr_operations)
+        agg_hr_operations = ({'Actual_Enrl' : 'sum',
+                              'Days' : 'max'})
+        df_temp = df_all_hours.groupby(['Building', 'Hr_{0}'.format(str(hr))], as_index=False).agg(agg_hr_operations)
         df_by_hr = df_by_hr.append(df_temp, ignore_index = True)
     
     return df_by_hr
@@ -69,6 +70,7 @@ def split_days(df_days):
         (df_days['Latitude'] != None) &
         (df_days['Longitude'] != None) &
         (df_days['Actual_Enrl'] > 0)]
+    
     """
     agg_operations = ({'Actual_Enrl' : 'sum',
                        'Latitude' : 'max',
