@@ -18,7 +18,7 @@ map.on("load", function() {
   
   map.addSource("PSU_buildings", {
     "type": "geojson",
-    "data": "PSU_class_map/app/data/PSU_buildings.geojson",
+    "data": "/PSU_class_map/app/data/PSU_buildings.geojson",
   });
 
   map.addLayer({
