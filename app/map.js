@@ -64,8 +64,9 @@ map.on("load", function() {
     "circle-opacity": 0.8     
     },
     filter: ["all", filterHour, filterDay]
-  }) ;
+  });
 
+  //Event Listeners
   document.getElementById("slider").addEventListener("input", function(e) {
   // get the current hour as an integer
   var hour = parseInt(e.target.value);
@@ -138,6 +139,16 @@ map.on("load", function() {
     map.setFilter("classes", ["all", filterHour, filterDay]);
   });
 
+  map.on('mousemove', function(e) {
+  var features = map.queryRenderedFeatures(e.point, {layers: ['classes']});
+
+  if (features.length > 0) {
+    document.getElementById('tot-enrolled').innerHTML = '<h3><strong>' + features[0].properties.ShortName +
+     '</strong></h3><p><strong><em>' + features[0].properties.Actual_Enrl + '</strong> students enrolled</em></p>';
+  } else {
+    document.getElementById('tot-enrolled').innerHTML = '<p>Hover over a building</p>';
+  }
+});
 
 });
 
