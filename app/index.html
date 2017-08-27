@@ -4,13 +4,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Map Example - Web Cartography!</title>
+    <title>PSU per-Building Enrollment</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css" rel="stylesheet" />
     <link href="/style.css" rel="stylesheet" />
+    <script src="/SECRETS.js"></script>
+
 
     <style>
         body { margin:0; padding:0; }
@@ -20,16 +22,45 @@
   </head>
   <body>
     <main>
-      <nav id="menu"></nav>
+
       <div id="map"></div>
-      <div class='map-overlay top'>
-          <div class='map-overlay-inner'>
-              <h2>Classes over time</h2>
-              <label id='month'></label>
-              <input id='slider' type='range' min='0' max='7' step='1' value='0' />
-          </div>
-      </div>
-      </div>
+        <div id='console'>
+          <h1>Enrolled Students</h1>
+          <p>Data: PSU Fall 2016</p>
+          <div class='session'>
+            <h2>Per Building Enrollment Totals</h2>
+            <div class='row colors'>
+            </div>
+            <div class='row labels'>
+              <div class='label'>0</div>
+              <div class='label'>60</div>
+              <div class='label'>170</div>
+              <div class='label'>360</div>
+              <div class='label'>710</div>
+              <div class='label'>1100+</div>
+            </div>
+
+            <h2>Day of the week</h2>
+            <div class='row' id='filters'>
+              <input id='Mon' type='radio' name='toggle' value='Mon' checked='checked'>
+              <label for='Mon'>M</label>
+              <input id='Tue' type='radio' name='toggle' value='Tue'>
+              <label for='Tue'>T</label>
+              <input id='Wed' type='radio' name='toggle' value='Wed'>
+              <label for='Wed'>W</label>
+              <input id='Thu' type='radio' name='toggle' value='Thu'>
+              <label for='Thu'>R</label>
+              <input id='Fri' type='radio' name='toggle' value='Fri'>
+              <label for='Fri'>F</label>
+              <input id='Sat' type='radio' name='toggle' value='Sat'>
+              <label for='Sat'>S</label>
+            </div>
+              <h2>Hour: <label id='active-hour'>6AM</label></h2>
+              <div id='tot-enrolled'><p>Hover over a building</p></div>
+              <input id='slider' class='row' type='range' min='6' max='20' step='1' value='6' />        
+        </div>
+
+
     </main>
    <script src="/map.js"></script>
   </body>
