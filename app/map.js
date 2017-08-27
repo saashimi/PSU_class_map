@@ -33,7 +33,7 @@ map.on("load", function() {
 
   map.addSource("PSU_full_schedule", {
     "type": "geojson",
-    "data": "data/PSU_full_schedule.geojson",
+    "data": "/PSU_class_map/app/data/PSU_full_schedule.geojson",
   });
   map.addLayer({
     "id": "classes",
