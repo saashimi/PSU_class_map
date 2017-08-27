@@ -54,8 +54,8 @@ def split_cols(df_datetime):
 
 def group_date_time(df_all_cols):
     """
-    Loops through every Hr column and groups by hour; output is a final combined
-    dataframe.
+    Loops through every Day and Hr column and groups by day/hour; output is a 
+    final combined dataframe.
     """
     # an empty dataframe:
     df_by_hr_day = pd.DataFrame()

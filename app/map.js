@@ -64,8 +64,22 @@ map.on("load", function() {
     "circle-opacity": 0.8     
     },
     filter: ["all", filterHour, filterDay]
-  }) ;
+  });
+  function countStudents() {
+    var features = map.queryRenderedFeatures({ layers : ["classes"]});
+    var enrolled = [];
+    if (features.length > 0) {
+      for (var i=0; i<features.length; i++) {
+      enrolled.push(features[i].properties.Actual_Enrl)
+      }
+    } else {
+      enrolled = [];
+    }
+    var total = eval(enrolled.join('+'));
+    document.getElementById("tot-enrolled").innerText = total;
+  }
 
+  //Event Listeners
   document.getElementById("slider").addEventListener("input", function(e) {
   // get the current hour as an integer
   var hour = parseInt(e.target.value);
@@ -116,6 +130,7 @@ map.on("load", function() {
   var hour12 = hour % 12 ? hour % 12 : 12;
   // update text in the UI
   document.getElementById("active-hour").innerText = hour12 + ampm;
+  countStudents();
   });
   
   document.getElementById("filters").addEventListener("change", function(e) {
@@ -136,6 +151,7 @@ map.on("load", function() {
       console.log("error");
     }
     map.setFilter("classes", ["all", filterHour, filterDay]);
+    countStudents();
   });
 
 
