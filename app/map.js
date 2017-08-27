@@ -1,7 +1,7 @@
 /* global mapboxgl */
 
 
-mapboxgl.accessToken = "pk.eyJ1Ijoia3NhYXZlZHJhIiwiYSI6ImNpam45bG1lbDAwZWx2YWx4aHVjOXZwMTEifQ.Xt258Ze2kA28j8wnC8LtLg" 
+mapboxgl.accessToken = TOKEN;
 var filterGroup = document.getElementById("filter-group");
 var filters = document.getElementById("filters");
 
