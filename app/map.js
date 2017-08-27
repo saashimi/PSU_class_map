@@ -1,7 +1,7 @@
 /* global mapboxgl */
 
 
-mapboxgl.accessToken = TOKEN;
+//mapboxgl.accessToken = TOKEN;
 var filterGroup = document.getElementById("filter-group");
 var filters = document.getElementById("filters");
 
