@@ -84,7 +84,7 @@ def save_to_csv(df_final):
     Simplifies data file by saving only pertinent data
     """   
     df_final = df_final.loc[df_final['Actual_Enrl'] > 0]
-    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude']
+    columns = ['Building', 'Actual_Enrl', 'Latitude', 'Longitude', 'ShortName']
     day_cols = [col for col in df_final.columns if 'Day' in col]
     for col in day_cols:
         columns.append(col) 
@@ -110,7 +110,6 @@ def main():
     df = split_cols(df)
     df = group_date_time(df)
     df = join_coords(df)
-    #df = split_days(df)
     save_to_csv(df) 
 
 if __name__ == '__main__':

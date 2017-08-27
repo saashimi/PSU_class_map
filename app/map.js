@@ -143,7 +143,7 @@ map.on("load", function() {
   var features = map.queryRenderedFeatures(e.point, {layers: ['classes']});
 
   if (features.length > 0) {
-    document.getElementById('tot-enrolled').innerHTML = '<h3><strong>' + features[0].properties.Building +
+    document.getElementById('tot-enrolled').innerHTML = '<h3><strong>' + features[0].properties.ShortName +
      '</strong></h3><p><strong><em>' + features[0].properties.Actual_Enrl + '</strong> students enrolled</em></p>';
   } else {
     document.getElementById('tot-enrolled').innerHTML = '<p>Hover over a building</p>';
