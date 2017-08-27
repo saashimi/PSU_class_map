@@ -67,15 +67,16 @@ map.on("load", function() {
   });
   function countStudents() {
     var features = map.queryRenderedFeatures({ layers : ["classes"]});
-    var enrolled = [];
+    console.log(features);
+    var enrolled = 0;
     if (features.length > 0) {
       for (var i=0; i<features.length; i++) {
-      enrolled.push(features[i].properties.Actual_Enrl)
+      enrolled = enrolled + features[i].properties.Actual_Enrl
       }
     } else {
-      enrolled = [];
+      console.log('There are no students!');
     }
-    var total = eval(enrolled.join('+'));
+    var total = enrolled; 
     document.getElementById("tot-enrolled").innerText = total;
   }
 
@@ -153,7 +154,6 @@ map.on("load", function() {
     map.setFilter("classes", ["all", filterHour, filterDay]);
     countStudents();
   });
-
 
 });
 
