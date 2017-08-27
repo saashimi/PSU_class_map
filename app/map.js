@@ -65,20 +65,6 @@ map.on("load", function() {
     },
     filter: ["all", filterHour, filterDay]
   });
-  function countStudents() {
-    var features = map.queryRenderedFeatures({ layers : ["classes"]});
-    console.log(features);
-    var enrolled = 0;
-    if (features.length > 0) {
-      for (var i=0; i<features.length; i++) {
-      enrolled = enrolled + features[i].properties.Actual_Enrl
-      }
-    } else {
-      console.log('There are no students!');
-    }
-    var total = enrolled; 
-    document.getElementById("tot-enrolled").innerText = total;
-  }
 
   //Event Listeners
   document.getElementById("slider").addEventListener("input", function(e) {
@@ -131,7 +117,6 @@ map.on("load", function() {
   var hour12 = hour % 12 ? hour % 12 : 12;
   // update text in the UI
   document.getElementById("active-hour").innerText = hour12 + ampm;
-  countStudents();
   });
   
   document.getElementById("filters").addEventListener("change", function(e) {
@@ -152,8 +137,18 @@ map.on("load", function() {
       console.log("error");
     }
     map.setFilter("classes", ["all", filterHour, filterDay]);
-    countStudents();
   });
+
+  map.on('mousemove', function(e) {
+  var features = map.queryRenderedFeatures(e.point, {layers: ['classes']});
+
+  if (features.length > 0) {
+    document.getElementById('tot-enrolled').innerHTML = '<h3><strong>' + features[0].properties.Building +
+     '</strong></h3><p><strong><em>' + features[0].properties.Actual_Enrl + '</strong> students enrolled</em></p>';
+  } else {
+    document.getElementById('tot-enrolled').innerHTML = '<p>Hover over a building</p>';
+  }
+});
 
 });
 
