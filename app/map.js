@@ -146,7 +146,7 @@ map.on("load", function() {
     document.getElementById('tot-enrolled').innerHTML = '<h3><strong>' + features[0].properties.ShortName +
      '</strong></h3><p><strong><em>' + features[0].properties.Actual_Enrl + '</strong> students enrolled</em></p>';
   } else {
-    document.getElementById('tot-enrolled').innerHTML = '<p>Hover over a building</p>';
+    document.getElementById('tot-enrolled').innerHTML = '<p>Hover over a building to see enrollment data.</p>';
   }
 });
 
