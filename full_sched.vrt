@@ -1,0 +1,36 @@
+<OGRVRTDataSource>
+    <OGRVRTLayer name="full_sched">
+        <SrcDataSource>full_sched.csv</SrcDataSource>
+        <GeometryType>wkbPoint</GeometryType>
+        <LayerSRS>EPSG:2913</LayerSRS>
+        <GeometryField encoding="PointFromColumns" x="Longitude" y="Latitude"/>
+        <Field name="Building" src="Building" type="String"/>
+        <Field name="Actual_Enrl" src="Actual_Enrl" type="Integer"/>
+        <Field name="ShortName" src="ShortName" type="String"/>
+        <Field name="Day_F" src="Day_F" type="String"/>
+        <Field name="Day_M" src="Day_M" type="String"/>
+        <Field name="Day_R" src="Day_R" type="String"/>
+        <Field name="Day_S" src="Day_S" type="String"/>
+        <Field name="Day_T" src="Day_T" type="String"/>
+        <Field name="Day_U" src="Day_U" type="String"/>
+        <Field name="Day_W" src="Day_W" type="String"/>
+        <Field name="Hr_6" src="Hr_6" type="String"/>
+        <Field name="Hr_7" src="Hr_7" type="String"/>
+        <Field name="Hr_8" src="Hr_8" type="String"/>
+        <Field name="Hr_9" src="Hr_9" type="String"/>
+        <Field name="Hr_10" src="Hr_10" type="String"/>
+        <Field name="Hr_11" src="Hr_11" type="String"/>
+        <Field name="Hr_12" src="Hr_12" type="String"/>
+        <Field name="Hr_13" src="Hr_13" type="String"/>
+        <Field name="Hr_14" src="Hr_14" type="String"/>
+        <Field name="Hr_15" src="Hr_15" type="String"/>
+        <Field name="Hr_16" src="Hr_16" type="String"/>
+        <Field name="Hr_17" src="Hr_17" type="String"/>
+        <Field name="Hr_18" src="Hr_18" type="String"/>
+        <Field name="Hr_19" src="Hr_19" type="String"/>
+        <Field name="Hr_20" src="Hr_20" type="String"/>
+        <Field name="Hr_21" src="Hr_21" type="String"/>
+        <Field name="Hr_22" src="Hr_22" type="String"/>
+        <Field name="Hr_23" src="Hr_23" type="String"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource>

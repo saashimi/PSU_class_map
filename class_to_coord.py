@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+from subprocess import call
 
 def split_cols(df_datetime):
     """
@@ -48,8 +49,7 @@ def split_cols(df_datetime):
                     print('error')
                     continue
 
-
-    df_datetime.to_csv('test_sched.csv')
+    #df_datetime.to_csv('test_sched.csv')
     return df_datetime
 
 def group_date_time(df_all_cols):
@@ -93,24 +93,34 @@ def save_to_csv(df_final):
         columns.append(col)
     df_final.to_csv('full_sched.csv', columns=columns)
 
+def save_as_geojson():
+    """
+    Saves as geojson file to bypass manual save in QGIS. Requires wrapping the csv
+    in a VRT file for ogr2ogr to work. 
+    """
+    args = ['ogr2ogr', '-f', 'GeoJson', 'app/data/PSU_full_schedule.geojson', 'full_sched.vrt', '-s_srs', 'EPSG:2913', '-t_srs', 'EPSG:4326']
+    call(args)
+
+
 def main():
     """
     main program control.
     """
     pd.set_option('display.max_rows', None)  
     filename = 'map_input/PSU_master_classroom.csv'
-    df = pd.read_csv(os.path.join(os.path.dirname(__file__), filename), dtype={'Schedule': object, 'Schedule Desc': object})   
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), filename), 
+                    dtype={'Schedule': object, 'Schedule Desc': object})   
     df = df.fillna('')
     df = df.loc[df['Online Instruct Method'] != 'Fully Online']
     # Limit to Fall 2016
     terms = [201604]
-    
     
     df = df.loc[df['Term'].isin(terms)]
     df = split_cols(df)
     df = group_date_time(df)
     df = join_coords(df)
     save_to_csv(df) 
+    save_as_geojson()
 
 if __name__ == '__main__':
     main()
